@@ -1,0 +1,309 @@
+\documentclass[sigconf,review]{acmart}
+%\documentclass[sigconf]{acmart}
+
+%\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{ulem}
+\usepackage{threeparttable}
+\usepackage{makecell}
+\usepackage{multirow}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+\AtBeginDocument{
+  \providecommand\BibTeX{{
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+    
+\newcommand{\question}[1]{{\textbf{#1}}}
+\newcommand{\DocumentationDebt}{{Document}}
+\newcommand{\CodeDebt}{{Code}}
+\newcommand{\DefectDebt}{{Defect}}
+\newcommand{\TestDebt}{{Test}}
+
+
+\begin{document}
+
+\title{An Empirical Study on Self-Fixed Technical Debt\\}
+
+
+\begin{abstract}
+
+\end{abstract}
+
+% \begin{CCSXML}
+% <ccs2012>
+%  <concept>
+%   <concept_id>10010520.10010553.10010562</concept_id>
+%   <concept_desc>Computer systems organization~Embedded systems</concept_desc>
+%   <concept_significance>500</concept_significance>
+%  </concept>
+%  <concept>
+%   <concept_id>10010520.10010575.10010755</concept_id>
+%   <concept_desc>Computer systems organization~Redundancy</concept_desc>
+%   <concept_significance>300</concept_significance>
+%  </concept>
+%  <concept>
+%   <concept_id>10010520.10010553.10010554</concept_id>
+%   <concept_desc>Computer systems organization~Robotics</concept_desc>
+%   <concept_significance>100</concept_significance>
+%  </concept>
+%  <concept>
+%   <concept_id>10003033.10003083.10003095</concept_id>
+%   <concept_desc>Networks~Network reliability</concept_desc>
+%   <concept_significance>100</concept_significance>
+%  </concept>
+% </ccs2012>
+% \end{CCSXML}
+
+% \ccsdesc[500]{Computer systems organization~Embedded systems}
+% \ccsdesc[300]{Computer systems organization~Redundancy}
+% \ccsdesc{Computer systems organization~Robotics}
+% \ccsdesc[100]{Networks~Network reliability}
+\keywords{Technical Debt}
+
+\maketitle
+%\section{Introduction}
+
+%Although some prior work focused on the evolution of fixed technical debt~\cite{GeorgeSANER2018}, examined the removal of self-admitted technical debt~\cite{RemovalICSME2017} and who removes self-admitted technical debt ~\cite{SATDICSME2014}~\cite{SATDMSR2016}, to the best of our knowledge, this is one of the first studies to investigate self-fixed technical debt. Examining self-fixed technical debt can shed light on ...
+
+
+%Therefore, in this paper we perform an empirical study on large-scale open source software projects, and investigate phenomena relating to self-fixed technical debt. 
+
+%Continuing the distinction between developers fixing their own technical debt as opposed to those fixing technical debt by others, we would expect the former to fix technical debt faster than the latter.
+
+
+
+\section{Study Design}
+
+This empirical study was designed
+based on the guidelines of Runeson et al.~\cite{Runeson:12} 
+and is reported according to 
+the Linear Analytic Structure~\cite{Runeson:12}.
+
+\subsection{Objectives and Research Questions}
+The goal of our study, 
+described according to 
+the Goal-Question-Metrics (GQM) approach~\cite{Solingen:02}, is to 
+``\textit{\textbf{analyze} 
+software systems written in Python 
+\textbf{for the purpose of} 
+investigating various types of technical debt 
+\textbf{with respect to} 
+the issues that are fixed
+by the same developers who introduced them, 
+\textbf{from the point of view of} 
+software developers 
+\textbf{in the context of}
+open source software}''. 
+
+This objective is further refined in terms of the following research questions:
+
+\begin{description}
+\item [\textbf{RQ1.}] \question{How much technical debt is self-fixed in open source projects?}
+
+Intuitively, a developer 
+who introduces technical debt 
+to source code 
+is normally the one 
+who is going to fix it 
+in the future. 
+Since developers are familiar 
+with the code they write,
+they are more likely to know 
+the cause of technical debt 
+incurred by it,
+and have strategies 
+to solve it.
+This research question aims 
+to investigate how prevalent 
+self-fixed technical debt 
+is in open source projects. 
+
+\item [\textbf{RQ2:}]\question{How long does self-fixed technical debt survive during the evolution of a system?}
+
+This research question focuses on 
+investigating if self-fixed issues are addressed faster than 
+the issues that are introduced
+by other developers. 
+Comparing the survival time 
+of self-fixed and non-self-fixed technical debt during the evolution of each system 
+helps us better understand 
+how developers deal with technical debt and whether self-fixed technical debt deserves special attention.
+
+\item [\textbf{RQ3:}]\question{Which type of technical debt is more likely to be self-fixed?}
+
+Different issues belong to different types, 
+and require different amounts of effort
+to be resolved. 
+Therefore, 
+this research question examines 
+what issues receive more attention 
+from the developers who introduced them. 
+In addition, 
+once we investigate the prevalence 
+of self-fixed technical debt (\textbf{RQ1}) 
+and its survival time (\textbf{RQ2}), 
+we would like to focus on the peculiarity of self-fixed technical debt.
+\end{description}
+
+\subsection{Case Selection}
+
+For the purpose of this study, we selected Python projects from the Apache Software Foundation (hereafter referred to as the Apache ecosystem) as subject systems. There are several reasons for the choice. First, the Apache ecosystem is the largest open source foundation with more than 7,000 Apache code committers\footnote{https://www.apache.org/, visited in November 2019}. Second, the ecosystem has 52 Python projects on GitHub, which contain different domains, sizes (up to 1,000 KLOC), activity (up to 10K commits to the master branch) and number of files (up to 700). Finally, Apache Python projects have long-term stability\footnote{http://www.apache.org/foundation/how-it-works.html, visited November 2019}: a team of self-selected technical experts manage each project by following Apache-wide meritocratic rules, and incubator filters projects based on their likelihood of becoming a successful community.
+
+%As unit of analysis, we chose the evolution of each Python, thus taking snapshots of the system files throughout their life-span. 
+To select systems among the Apache Python projects on GitHub, we used two main inclusion criteria:
+\begin{enumerate}
+    \item 
+    The project must show up on the Apache Projects List\footnote{https://www.apache.org/index.html\#projects-list, visited September 2019}, which excludes Apache Incubator projects. Incubated projects are on a transition period to conform to Apache standards and, are therefore  non-representative.
+    
+    \item  The project's main programming language must be Python, i.e., the largest number of files and source lines of code (SLOC) are written in Python.
+
+\end{enumerate}
+
+\sout{Based on the criteria, we selected 20 Python projects, which include 3682 Python source files from the Apache ecosystem. The projects have an average of 1410 commits (median: 187; max: 10942), 124 files (median: 32; max: 865) and 17K SLOC (median: 4K; max: 126K). The majority of projects have a long history of commits (at least 3 years), which allows following the co-occurrence of technical debt over an extensive period~\cite{Marinescu2012}. The majority also has a large number of files, which mitigates potential threats to the external validity (i.e. how far the sample represents the population). }
+
+To analyze the evolution of project, the historical information of the project is required. To guarantee the inclusion of sufficient revisions for long-lived software systems, we decided to used at least 2000 snapshots for each project. In particular, we took the entire history of project that has less than 2000 snapshots.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% SUBSECTION %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Variables and Data Collection}\label{sec:variables}
+
+In this section, we describe the sets of variables necessary to answer the research questions, as well as the necessary tooling and major steps in data collection. In particular, each unit of analysis comprises the tuple:
+
+\vspace{0.2cm}
+\noindent{$<$\textit{snapshot identification}; \textit{TD information}$>$}
+\vspace{0.2cm}
+
+The \textit{snapshot identification} comprises the \textit{project name}, \textit{commit hashcode}, \textit{developer}
+and \textit{snapshot time-stamp}, i.e., regards the date in which the snapshot was taken.
+\textit{TD information} regards the amount of issues in a particular snapshot.
+
+%Figure X shows the overview of our data collection, and the following sections detail each step to conduct our study:
+
+\vspace{0.2cm}
+\noindent
+\textbf{Step 1: Technical Debt Detection}
+
+To perform our study, as aforementioned, we use SonarQube~\cite{SonarQube} as the tool to detect technical debt. 
+%SonarQube is widely used by more than 1000 companies worldwide to measure the quality of their systems\footnote{http://www.sonarsource.com/customers}. It can analyze multiple revisions of a system and track the problems during the evolution. For example, it can be used to detect technical debt that is still open and the time when it was detected in the Python file.
+SonarQube defines a set of rules to detect various types of technical debt and classifies them into five severity levels: \textit{blocker}, \textit{critical}, \textit{major}, \textit{minor} and \textit{info}. During analysis, SonarQube creates a new issue when a piece of code breaks one of the predefined rules and also assigns an estimated time for each issue about how much time a developer spends to resolve it. We limited the severity level to \textit{blocker}, \textit{critical} and \textit{major} since many issues of \textit{minor} and \textit{info} levels are trivial and developers might not treat them as technical debt~\cite{DigkasSANER2018}.
+
+Table~\ref{tab:56Rules} illustrates 56 rules provided by SonarQube\footnote{The description of the rules can be found at \url{https://github.com/TDinPython/}}, which belong to \textit{blocker}, \textit{critical} and \textit{major} severity levels. To simplify the organization of the technical debt issues, we grouped the rules into categories according to their function (e.g., cyclomatic complexity, exception handling etc.). The top-level types of technical debt, i.e., Code Debt, Test Debt, Documentation Debt and Defect Debt, are defined in the classification by Alves et al.~\cite{ClassifyTD2014}. This classification has been previously validated and used in other studies~\cite{ClassifyTD1,MSR2016}. The sub-categories of Code Debt has also been adopted from ~\cite{ClassifyTD2014} and its refinement in ~\cite{MSR2016}.  
+
+Based on the above, the variables that comprise the \textit{TD information} for each unit of analysis are: (a) the count of issues for each type of debt, calculated as the sum of the issues for all rules mapped to that type, (b) the count of issues for each of the 56 rules, and (c) the remediation time for each issue.
+
+
+\begin{table}[htbp]
+  \centering
+  \caption{Manual Categorization of 56 Python technical debt types}
+  \setlength{\tabcolsep}{1pt}
+    \begin{tabular}{C{1.5cm}|L{1.3cm}l|l}
+    \Xhline{0.7pt}
+    \multicolumn{1}{c|}{\textbf{Category}} & \multicolumn{2}{l|}{\textbf{Description}} & \multicolumn{1}{l}{\textbf{Rule ID}} \\
+    \Xhline{0.7pt}
+    \multirow{9}{*}{Code Debt} & \multicolumn{2}{l|}{Cognitive Complexity} & \multicolumn{1}{l}{29,16,38} \\
+    \multirow{9}{*}{} & \multicolumn{2}{l|}{Cyclomatic Complexity} & 
+    \multicolumn{1}{l}{20,4} \\
+    & \multicolumn{2}{l|}{Duplicated Code} & 58,26 \\
+    & \multicolumn{2}{l|}{Long File} & 47 \\
+    & \multicolumn{2}{l|}{Long Line} & 50 \\
+    & \multicolumn{2}{l|}{Long Parameter List} & 46 \\
+    & \multicolumn{2}{l|}{Name Convertion} & \multicolumn{1}{l}{42,36,7} \\
+    & \multicolumn{2}{l|}{Redundant Code} & \multicolumn{1}{l}{45,25,390,13} \\
+    & \multicolumn{2}{l|}{Spaghetti Code} & 41,24 \\
+    \cline{1-4}
+    \multicolumn{1}{c|}{Test Debt} & \multicolumn{2}{l|}{Incomplete Test Coverage} & 56 \\
+    \cline{1-4}
+    \multirow{3}{*}{Document-} & \multicolumn{2}{l|}{Define Docstrings} & \multicolumn{1}{l}{14} \\
+    \multirow{3}{*}{-ation Debt}
+    & \multicolumn{2}{l|}{``FIXME'' tags} & 54 \\
+    & \multicolumn{2}{l|}{Sufficient Comment Density} & 57\\
+    \cline{1-4}
+    \multirow{11}{*}{Defect} & \multicolumn{2}{l|}{Python3} & \multicolumn{1}{l}{12,21,31,52,432,439} \\
+    \cline{2-4}
+    \multirow{11}{*}{Debt}
+    & \multicolumn{2}{l|}{\multirow{2}{*}{Argument Parse}} & \multicolumn{1}{l}{299,355,363,268,369}\\
+    & &  & \multicolumn{1}{l}{403,411,414,418}\\
+    \cline{2-4}
+    & \multirow{9}{*}{Exception} & \multicolumn{1}{|l|}{Exception} & 440 \\
+    & \multirow{9}{*}{Handling} & \multicolumn{1}{|l|}{SyntaxError} & \multicolumn{1}{l}{23,49,281,328} \\
+    &  & \multicolumn{1}{|l|}{UnboundLocalError} & \multicolumn{1}{l}{276,289,393,394} \\
+    &  & \multicolumn{1}{|l|}{TypeError} & \multicolumn{1}{l}{3,274,364,438} \\
+    &  & \multicolumn{1}{|l|}{NameError} & 360 \\
+    &  & \multicolumn{1}{|l|}{ArithmeticError} & 15 \\
+    &  & \multicolumn{1}{|l|}{SystemError} & 51 \\
+    &  & \multicolumn{1}{|l|}{NotImplementedError} & 424 \\
+    &  & \multicolumn{1}{|l|}{ValueError} & 273 \\
+    \Xhline{0.7pt}
+    \end{tabular}
+  \label{tab:56Rules}
+\end{table}
+
+\vspace{0.2cm}
+\noindent
+\textbf{Step 2: Snapshot Data Extraction}
+
+We started by cloning the selected Apache Python projects from GitHub, on which software development has evolved beyond a single project into socio-technical ecosystems~\cite{Ding2017}. Then, we wrote a script to: (1) extract the entire change history of each project; (2)reserve no more than 3000 commits per project, therefore defining the snapshots, and (3) submit the snapshots to SonarQube in chronological order.
+
+To analyze technical debt that are fixed during the evolution of systems, historical information of projects, i.e., the information for each snapshot, is required. 
+Therefore, for each snapshot, we recorded the \textit{project name}, the \textit{commit hashcode} and the \textit{developer} responsible for the commit, including the developer's \textit{name} and \textit{email} information.
+
+%Finally, we use a second script to obtain all the information for each issue, i.e., which rule it breaks, when it appeared and disappeared in the file and the name of the file. With this information, we calculate the variables the comprise the TD information of each unit of analysis, i.e., the TD of each file for each snapshot.
+
+\vspace{0.2cm}
+\noindent
+\textbf{Step 3: Self-Fixed Technical Debt Identification}
+
+According to the documentation of SonarQube\footnote{https://docs.sonarqube.org/latest/user-guide/issues/}, issues that are considered to be fixed could be involved to two situations: (1) issues have been corrected (i.e., the issues are truely fixed); (2) or the file is no longer available (removed from the project). Therefore, SonarQube will detect more fixed issues than the fact. To handle these issues, we retain the files that are not deleted at the last commit, thus, we filter out the issues that disappeared caused by files deletion.
+
+%we consider three cases according to the changes of files that contain technical debt:
+
+% \begin{itemize}
+        
+%     \item \textbf{Existing:} 
+% Normally, a file exists from the beginning of one project until its last commit. Every change (e.g. different commits) made to a file produces a new version and SonarQube will detect the issues that are truely fixed by analyzing multiple revisions files. In other words, this case will not influence the results extracted from SonarQube.
+        
+%     \item \textbf{Moved:}
+% This case means that a file has been moved to another address, however, but still exists in the whole project. To track the influence of moving a file, we investigate some open issues and fixed issues in SonarQube manually. The results of this case show that the issues are still open when the file is moved and SonarQube can also detect the moving path of each issue. Similarly, this case will not change the results.
+    
+%     \item \textbf{Deleted or Renamed:}
+% Different from the former two cases, that case means the original file is no longer exist during the evolution of project. When we check fixed issues, SonarQube sometimes shows \textit{``The component has been removed or never existed"} instead of the fixing details. The phenomenon indicates that SonarQube will regard a disappeared issue as fixed. Since we focus on the fixed technical debt, it is important to handle file deletes and renames. To solve this problem, for the new version of \textbf{renamed} file, SonarQube will determine whether an issue is newly created or already existed. It compares list of issues reported by the new version, with the issues from the previous analysis. For the \textbf{deleted} files and \textbf{renamed} files, we only keep the files that exist on the last commit. We filtered out the issues that are fixed caused by files disappeared and removed them.
+    
+% \end{itemize}
+
+When analyzing multiple revisions of a system, SonarQube tracks the detailed information of issues that are fixed during the evolution. For example, the first commit that contains the issue is considered as the commit that introduced it; similarly, issue disappeared commit tend to be considered as the commit that fixed that issue. Therefore, we obtained the \textit{hashcode} of both introduced and fixed commit for a fixed issue from SonarQube. 
+
+To identify whether an issue is fixed by the same developer who introduces it, we search by the \textit{hashcode} in the information of \textit{snapshot} to find the corresponding \textit{developers} who introduced and fixed that issue, respectively. Furthermore, developers might change their names when submit a new commit on GitHub, thus we compare the developers' name as well as their email address. We consider the developers with the same name or email address are the same person, i.e., the corresponding issue has been self-fixed.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% SUBSECTION %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Analysis Procedure}
+\label{sec:analysis_procedure}
+
+To answer \textbf{RQ1}, we compare the number of self-fixed and non-self-fixed technical debt, i.e., the issue has been fixed by the other developer, for each project. Moreover, we calculate the issue self-fixing rate, i.e., the percentage of the issues that are self-fixed in each project. Furthermore, we investigate the relationship between the issue self-fixing rate and several project characteristics, e.g., LOC and the number of developers.
+
+For \textbf{RQ2}, we calculate and analyze the survival time of each issue. This variable is measured as the number of days between the introduction of an issue and the moment when it is fixed in the source code.
+
+To investigate \textbf{RQ3}, we compute the issue self-fixing rate for each rule to investigate whether some rules are self-fixed more often than others. To answer this research question, we sort the self-fixing rates of all the rules to get the most frequently self-fixed issue and classify them according to a high-level technical debt categories. Finally, we sum up all the effort required to fix the issues according to the estimates provided by SonarQube and to investigate the relationship between remediation effort and frequency of self-fixes.
+
+
+
+
+\newpage
+
+\normalem
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{bibliography}
+
+\vspace{12pt}
+
+\end{document}
