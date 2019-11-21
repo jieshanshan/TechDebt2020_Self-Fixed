@@ -12,7 +12,7 @@ comdev-wwwsite;87;2;1;
 dubbo-python;968;72;5;
 dubbo-python2;2004;154;1;
 fluo-muchos;1477;290;16;
-kibble;8507;629;6;At that time, LOC of JavaScript is 8656
+kibble;8507;629;6;LOC of JavaScript is 8656
 kibble-scanners;4122;166;1;
 libcloud;165092;6880;277;
 openwhisk-composer-python;1820;84;5;
@@ -25,6 +25,6 @@ qpid-dispatch;36193;2443;19;
 qpid-interop-test;5224;187;2;
 qpid-python;21110;1006;14;
 rocketmq-client-python;861;308;14;
-steve;2862;387;4;At that time, LOC of JavaScript is 20914, but Apache still considers it as Python project
+steve;2862;387;4;LOC of JavaScript is 20914: but Apache still considers it as Python project
 trafficserver-qa;1105;109;2;
 usergrid-python;660;2;1;
